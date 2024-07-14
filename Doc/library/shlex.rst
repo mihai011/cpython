@@ -55,6 +55,11 @@ The :mod:`shlex` module defines the following functions:
    string that can safely be used as one token in a shell command line, for
    cases where you cannot use a list.
 
+   In case the input is a bytes object, this object will be decoded into
+   ASCII format using `surrogateescape <https://peps.python.org/pep-0383/>`_
+   error handler to prevent Unicode misinterpretation and deforming the input in some bytes.
+
+
    .. _shlex-quote-warning:
 
    .. warning::
@@ -85,6 +90,13 @@ The :mod:`shlex` module defines the following functions:
       >>> remote_command = 'ssh home {}'.format(quote(command))
       >>> print(remote_command)
       ssh home 'ls -l '"'"'somefile; rm -rf ~'"'"''
+
+   :func:`quote` accepts bytes as input:
+
+      >>> from shlex import quote
+      >>> bytes_data = b'hello \x80\x81''
+      >>> print(quote(bytes_data))
+      'hello \udc80\udc81'
 
    The quoting is compatible with UNIX shells and with :func:`split`:
 
