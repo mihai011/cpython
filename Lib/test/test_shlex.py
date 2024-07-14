@@ -336,7 +336,16 @@ class ShlexTest(unittest.TestCase):
         for u in unsafe:
             self.assertEqual(shlex.quote("test%s'name'" % u),
                              "'test%s'\"'\"'name'\"'\"''" % u)
+            
+    def testQuoteBytes(self):
+        
+        bytes_sample = b'hello \x80\x81' 
 
+        self.assertEqual(shlex.quote(b''), "''")
+        self.assertEqual(shlex.quote(b'test file name'), "'test file name'")
+        self.assertEqual(shlex.quote(b'test\x00name'), "'test\x00name'")
+        self.assertEqual(shlex.quote(bytes_sample), "'hello \udc80\udc81'")
+        
     def testJoin(self):
         for split_command, command in [
             (['a ', 'b'], "'a ' b"),

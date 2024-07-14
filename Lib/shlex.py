@@ -326,7 +326,7 @@ def quote(s):
         return "''"
 
     if isinstance(s, bytes):
-        s = s.decode('utf-8')
+        s = s.decode('ascii', errors='surrogateescape')
 
     if _find_unsafe(s) is None:
         return s
